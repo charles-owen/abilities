@@ -1,0 +1,12 @@
+{
+  "screen": 4,
+  "camera": "p1",
+  "camera-calibration": "calibration-basler.yaml",
+  "write": "projector-calibration-home.yaml",
+  "invert": true,
+  "surfaces": [
+    [[0, 0, 0], [520, 0, 0], [520, 0, -520], [0, 0, -520]],
+    [[0, 0, 0], [0, 470, 0], [500, 470, 0], [500, 0, 0]]
+  ]
+}
+
