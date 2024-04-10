@@ -1,0 +1,17 @@
+build
+.vscode
+.idea
+cmake-build*
+.DS_Store
+docs/books
+docs/pubs
+*.lck
+*.bak_*
+output
+*.yaml
+*.mov
+*.avi
+*.mp4
+*.mp3
+local
+.pytest*
