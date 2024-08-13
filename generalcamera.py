@@ -14,7 +14,7 @@ class GeneralCamera:
     Currently only supports on Pylon device (first device found)
     """
     def __init__(self, width=None, height=None, camera=None, prefer_pylon=True, gain=None,
-                 exposure_time=None, frame_rate=None):
+                 exposure_time=None, frame_rate=None, white_balance=None, balance_ratio_red=None, balance_ratio_green=None, balance_ratio_blue=None):
         """
         Constructor
         :param width: Specified desired width, default is none
@@ -32,6 +32,10 @@ class GeneralCamera:
         self._prefer_pylon = prefer_pylon
         self._exposure_time = exposure_time
         self._frame_rate = frame_rate
+        self._white_balance = white_balance
+        self._balance_ratio_red = balance_ratio_red
+        self._balance_ratio_green = balance_ratio_green
+        self._balance_ratio_blue = balance_ratio_blue
         self._device = None
         self._source = None
 
@@ -128,13 +132,25 @@ class GeneralCamera:
             device.Gain.Value = self._gain
         if self._exposure_time is not None:
             device.ExposureTime.Value = self._exposure_time
-
+        if self._white_balance is not None:
+            device.BalanceWhiteAuto.Value =  "Continuous" if self._white_balance else "Off"
         if self._frame_rate is not None:
             if self._frame_rate > 0:
                 device.AcquisitionFrameRate.Value = self._frame_rate
                 device.AcquisitionFrameRateEnable.Value = True
             else:
                 device.AcquisitionFrameRateEnable.Value = False
+        if self._balance_ratio_red is not None:
+            device.BalanceRatioSelector.Value = "Red"
+            device.BalanceRatio.Value = self._balance_ratio_red
+        if self._balance_ratio_green is not None:
+            device.BalanceRatioSelector.Value = "Green"
+            device.BalanceRatio.Value = self._balance_ratio_green
+        if self._balance_ratio_blue is not None:
+            device.BalanceRatioSelector.Value = "Blue"
+            device.BalanceRatio.Value = self._balance_ratio_blue
+        
+            
 
         # Grabbing continuously (video) with minimal delay
         self._device.StartGrabbing(pylon.GrabStrategy_LatestImageOnly)

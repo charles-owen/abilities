@@ -15,7 +15,13 @@ Options:
     --invert                    If set, invert the camera image (display only)
     --offset=<offset>           Offset to add to the camera calibration
 """
+### python camera-calibration.py --camera=p1 --show --write='../local/camera-sample.yaml' --offset=13.5,8.5,0
 
+import sys
+import os
+
+# Add the parent directory of the current script to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from docopt import docopt
 from abilities import CameraCalibration
 from abilities import FullscreenShow
@@ -32,4 +38,3 @@ if __name__ == '__main__':
 
     if calibration.compute():
         print("Calibration computed successfully")
-

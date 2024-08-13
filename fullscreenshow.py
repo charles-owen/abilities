@@ -24,6 +24,8 @@ class FullscreenShow:
             return
 
         screen = screeninfo.get_monitors()[self._screen - 1]
+        print(monitors)
+        print(screen)
         width, height = screen.width, screen.height
 
         self._width = width
@@ -61,3 +63,4 @@ class FullscreenShow:
     def imshow(self, image):
         if self._is_open:
             cv2.imshow(self._name, image)
+            

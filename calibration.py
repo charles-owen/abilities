@@ -116,6 +116,20 @@ class Calibration:
 
         return u, v
 
+    def project2d(self, x, y):
+        """
+        Project a 3D world point to the 2D image space
+        :param x: X in world coordinates
+        :param y: Y in world coordinates
+        :return: u, v in screen coordinates
+        """
+        w = np.array([[x], [y], [1]])
+        p = self.mtx @ w
+        u = p[0][0]/ p[2][0]
+        v = p[1][0] / p[2][0]
+
+        return u, v
+
     def unproject(self, u, v):
         """
         Convert a value in screen coordinates to a ray that

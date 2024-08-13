@@ -92,6 +92,7 @@ class ProjectorCalibration(Calibration):
             if key == ord('q') or key == 27:
                 break
 
+
     def _compute_calibration(self, detected_corners, detected_ids):
         world_points = []
         image_points = []
@@ -137,6 +138,19 @@ class ProjectorCalibration(Calibration):
                         image_points.append(projected_corner)
 
         # Now we have the world points and image points, compute the calibration
+        if len(self._surfaces) > 1:
+            return self._compute_calibration3d(world_points, image_points)
+        else:
+            return self._compute_calibration2d(world_points, image_points)
+
+    def _compute_calibration3d(self, world_points, image_points):
+        '''
+        Given world points and image points, compute a 3d projector calibration
+        :param world_points: World points
+        :param image_points: Corresponding image points
+        :return: True if successful
+        '''
+
         try:
             wp = np.array([world_points], dtype=np.float32)
             ip = np.array([image_points], dtype=np.float32)
@@ -158,6 +172,43 @@ class ProjectorCalibration(Calibration):
 
         self._valid = True
         return True
+
+    def _compute_calibration2d(self, world_points, image_points):
+        '''
+        Given world points and image points, compute a 2d projector calibration
+        :param world_points: World points
+        :param image_points: Corresponding image points
+        :return: True if successful
+        '''
+        # For now we'll assume this is only for points in the xy plane with Z = 0
+        world_points2d = []
+        for p in world_points:
+            world_points2d.append([p[0], p[1]])
+
+        wp = np.array([world_points2d], dtype=np.float32)
+        ip = np.array([image_points], dtype=np.float32)
+        M, mask = cv2.findHomography(wp, ip)
+        self.mtx = M
+        self.dist = None
+        self.rvecs = None
+        self.tvecs = None
+        # print(M)
+        #
+        # # Test loop
+        # for i in range(0, len(world_points)):
+        #     w1 = world_points[i]
+        #     w1 = [i * 0.01, i * 0.01, 0]
+        #     w1n = np.array([[w1[0]], [w1[1]], [1]])
+        #     i1 = image_points[i]
+        #
+        #     i2 = M @ w1n
+        #     i3 = [i2[0] / i2[2], i2[1] / i2[2]]
+        #
+        #     pass
+
+        self._valid = True
+        return True
+
 
     @staticmethod
     def tuple_to_column_matrix(p):
