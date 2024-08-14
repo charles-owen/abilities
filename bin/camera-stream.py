@@ -20,7 +20,7 @@ Options:
 
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from docopt import docopt
 from abilities import GeneralCamera
@@ -92,6 +92,6 @@ def stream(docopt_args):
 #
 if __name__ == '__main__':
     args = docopt(__doc__)
-    print(args)
+    # print(args)
 
     stream(args)
