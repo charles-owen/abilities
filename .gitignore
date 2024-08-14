@@ -15,3 +15,5 @@ output
 *.mp3
 local
 .pytest*
+.venv*
+
