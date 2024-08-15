@@ -197,7 +197,6 @@ class ProjectorCalibration(Calibration):
         # # Test loop
         # for i in range(0, len(world_points)):
         #     w1 = world_points[i]
-        #     w1 = [i * 0.01, i * 0.01, 0]
         #     w1n = np.array([[w1[0]], [w1[1]], [1]])
         #     i1 = image_points[i]
         #
