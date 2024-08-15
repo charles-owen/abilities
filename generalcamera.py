@@ -54,7 +54,7 @@ class GeneralCamera:
                 self._camera = int(camera[1:])
             else:
                 self._require_opencv = True
-                self._camera = int(camera)
+                self._camera = min(1, int(camera)) - 1
 
 
     def open(self):
