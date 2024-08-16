@@ -2,10 +2,12 @@ import yaml
 import numpy as np
 import cv2
 
+
 class Calibration:
     """
     Class the stores and utilizes an OpenCV calibration
     """
+
     def __init__(self):
         # The image size
         self.imsize = None
@@ -23,6 +25,14 @@ class Calibration:
         self.tvecs = None
 
         self._valid = False
+
+    def set(self, imsize, mtx, dist=None, rvecs=None, tvecs=None):
+        self.imsize = imsize
+        self.mtx = mtx
+        self.dist = dist
+        self.rvecs = rvecs
+        self.tvecs = tvecs
+        self._valid = True
 
     def write(self, filename):
         """
@@ -102,7 +112,7 @@ class Calibration:
             r2 = xp * xp + yp * yp
             r4 = r2 * r2
             r6 = r4 * r2
-            kfactor = (1 + k1 * r2 + k2 * r4+ k3 * r6)
+            kfactor = (1 + k1 * r2 + k2 * r4 + k3 * r6)
             xpp = xp * kfactor + 2 * p1 * xp * yp + p2 * (r2 + 2 * xp * xp)
             ypp = yp * kfactor + p1 * (r2 + 2 * yp * yp) + 2 * p2 * xp * yp
         else:
@@ -125,7 +135,7 @@ class Calibration:
         """
         w = np.array([[x], [y], [1]])
         p = self.mtx @ w
-        u = p[0][0]/ p[2][0]
+        u = p[0][0] / p[2][0]
         v = p[1][0] / p[2][0]
 
         return u, v
@@ -147,8 +157,8 @@ class Calibration:
         # Remove the camera distortion
         coords = np.array([[u, v]])
         xy = cv2.undistortPoints(coords, self.mtx, self.dist)
-        xp = xy[0][0][0]        # x-prime
-        yp = xy[0][0][1]        # y-prime
+        xp = xy[0][0][0]  # x-prime
+        yp = xy[0][0][1]  # y-prime
 
         # This is a point on a plane parallel to the xy plane
         # relative to the camera at z=1
@@ -190,7 +200,7 @@ class Calibration:
     def lastPose(self):
         # Get the last camera pose
         t = self.tvecs[len(self.tvecs) - 1]
-        r,_ = cv2.Rodrigues(self.rvecs[len(self.rvecs) - 1])
+        r, _ = cv2.Rodrigues(self.rvecs[len(self.rvecs) - 1])
         return t, r
 
     def lastPoseInv(self):
