@@ -16,4 +16,5 @@ output
 local
 .pytest*
 .venv*
+__pycache*
 
