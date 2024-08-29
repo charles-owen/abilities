@@ -1,0 +1,3 @@
+
+class OpenFailedException(Exception):
+    pass
