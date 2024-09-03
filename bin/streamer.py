@@ -15,10 +15,11 @@ Press ESC or q to close the window and exit. + increase zoom, - decreases zoom
 
 Usage:
     camera-stream [--camera=<id>]
+    camera-stream [--movie=<movie>]
 
 Options:
     --camera=<id>           Camera number to use - starting at 1. Prefix with 'p' to force Pylon camera
-
+    --movie=<movie>         Movie to play rather than the camera
 """
 
 import sys
@@ -85,7 +86,7 @@ class StreamerConcrete(StreamerCommandLine):
 #
 if __name__ == '__main__':
     args = docopt(__doc__)
-    # print(args)
+    print(args)
 
     streamer = StreamerConcrete(args)
     streamer.start()

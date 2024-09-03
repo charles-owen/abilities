@@ -19,19 +19,35 @@ class Streamer(ABC):
     """
 
     def __init__(self):
+        # Camera to use if camera option selected
         self._camera = None
+
+        # Movie to use if movie option selected
+        self._movie = None
 
     def set_camera(self, camera):
         self._camera = GeneralCamera(gain=0, frame_rate=30, camera=camera)
         if not self._camera.open():
-            raise OpenFailedException("Unable to open camera")
+            raise OpenFailedException(f"Unable to open camera {camera}")
+
+    def set_movie(self, movie):
+        self._movie = cv2.VideoCapture(movie)
+        if not self._movie.isOpened():
+            raise OpenFailedException(f"Unable to open movie {movie}")
 
     def start(self):
         self.on_start()
 
+        device_to_use = None
+
         if self._camera is not None:
+            device_to_use = self._camera
+        elif self._movie is not None:
+            device_to_use = self._movie
+
+        if device_to_use is not None:
             while True:
-                ret, frame = self._camera .read()
+                ret, frame = device_to_use.read()
 
                 self.on_frame(frame)
                 key = cv2.waitKey(1) & 0xff
