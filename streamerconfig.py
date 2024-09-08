@@ -50,3 +50,11 @@ class StreamerConfig:
     @property
     def movie(self):
         return self._movie
+
+    @property
+    def dir(self):
+        return self._dir
+
+    @property
+    def config(self):
+        return self._config

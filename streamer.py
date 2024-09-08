@@ -41,7 +41,7 @@ class Streamer(ABC):
 
                 self.on_frame(frame)
                 key = cv2.waitKey(1) & 0xff
-                if not self.on_key(key):
+                if not self.on_key(key, frame):
                     if key == ord('q') or key == 27:
                         break
 
@@ -57,7 +57,7 @@ class Streamer(ABC):
     def on_frame(self, frame):
         pass
 
-    def on_key(self, key):
+    def on_key(self, key, frame):
         return False
 
     @property

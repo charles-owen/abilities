@@ -36,7 +36,7 @@ class StreamerConcrete(Streamer):
     from a camera or file.
     """
     def __init__(self, docopt_args):
-        Streamer.__init__(self, docopt_args)
+        super().__init__(docopt_args)
 
         self._zoom = 1.0
 
@@ -64,7 +64,7 @@ class StreamerConcrete(Streamer):
         """
         cv2.destroyWindow("Video Stream")
 
-    def on_key(self, key):
+    def on_key(self, key, frame):
         """
         Called when a key is pressed by the user.
         :param key: Key that is pressed
