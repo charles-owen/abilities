@@ -38,6 +38,8 @@ class Streamer(ABC):
         if device is not None:
             while True:
                 ret, frame = device.read()
+                if not ret:
+                    break
 
                 self.on_frame(frame)
                 key = cv2.waitKey(1) & 0xff

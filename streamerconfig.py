@@ -53,7 +53,10 @@ class StreamerConfig:
 
     @property
     def dir(self):
-        return self._dir
+        if self._dir == '':
+            return ''
+        else:
+            return self._dir + '/'
 
     @property
     def config(self):
