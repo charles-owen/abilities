@@ -3,7 +3,7 @@ import cv2
 
 from .generalcamera import GeneralCamera
 from .exceptions import OpenFailedException
-
+from .streamerconfig import StreamerConfig
 
 class Streamer(ABC):
     """
@@ -11,43 +11,33 @@ class Streamer(ABC):
     a live camera or movie file. Meant to simplify applications that
     need to read from a file for development, then be subject to
     deployment with a live camera.
-
-    There are two derived versions:
-
-    StreamerCommandLine - Expects the camera or movie be specified using command line arguments
-    StreamerConfig - Expects the camera or movie be specified using a JSON config file
     """
 
-    def __init__(self):
-        # Camera to use if camera option selected
-        self._camera = None
-
-        # Movie to use if movie option selected
-        self._movie = None
-
-    def set_camera(self, camera):
-        self._camera = GeneralCamera(gain=0, frame_rate=30, camera=camera)
-        if not self._camera.open():
-            raise OpenFailedException(f"Unable to open camera {camera}")
-
-    def set_movie(self, movie):
-        self._movie = cv2.VideoCapture(movie)
-        if not self._movie.isOpened():
-            raise OpenFailedException(f"Unable to open movie {movie}")
+    def __init__(self, docopt_args):
+        if '--config' in docopt_args and docopt_args['--config'] is not None:
+            self._config = StreamerConfig(docopt_args, docopt_args['--config'])
+        else:
+            self._config = StreamerConfig(docopt_args, None)
 
     def start(self):
         self.on_start()
 
-        device_to_use = None
+        device = None
+        config = self._config
 
-        if self._camera is not None:
-            device_to_use = self._camera
-        elif self._movie is not None:
-            device_to_use = self._movie
+        if config.camera is not None:
+            device = GeneralCamera(gain=0, frame_rate=30, camera=config.camera)
+            if not device.open():
+                raise OpenFailedException(f"Unable to open camera {config.camera}")
 
-        if device_to_use is not None:
+        elif config.movie is not None:
+            device = cv2.VideoCapture(config.movie)
+            if not device.isOpened():
+                raise OpenFailedException(f"Unable to open movie {config.movie}")
+
+        if device is not None:
             while True:
-                ret, frame = device_to_use.read()
+                ret, frame = device.read()
 
                 self.on_frame(frame)
                 key = cv2.waitKey(1) & 0xff
@@ -70,4 +60,14 @@ class Streamer(ABC):
     def on_key(self, key):
         return False
 
+    @property
+    def config(self):
+        return self._config
 
+    @property
+    def camera(self):
+        return self._config.camera
+
+    @property
+    def movie(self):
+        return self._config.movie

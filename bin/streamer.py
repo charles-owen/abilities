@@ -14,12 +14,12 @@ the first Pylon camera.
 Press ESC or q to close the window and exit. + increase zoom, - decreases zoom
 
 Usage:
-    camera-stream [--camera=<id>]
-    camera-stream [--movie=<movie>]
+    camera-stream [--camera=<id>] [--movie=<movie>] [--config=<config>]
 
 Options:
     --camera=<id>           Camera number to use - starting at 1. Prefix with 'p' to force Pylon camera
     --movie=<movie>         Movie to play rather than the camera
+    --config=<config>       Config file to use that specifies the parameters
 """
 
 import sys
@@ -28,15 +28,15 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from docopt import docopt
 import cv2
-from abilities import StreamerCommandLine
+from abilities import Streamer
 
-class StreamerConcrete(StreamerCommandLine):
+class StreamerConcrete(Streamer):
     """
     Simple example of how to use StreamerCommandLine to stream video
     from a camera or file.
     """
     def __init__(self, docopt_args):
-        StreamerCommandLine.__init__(self, docopt_args)
+        Streamer.__init__(self, docopt_args)
 
         self._zoom = 1.0
 

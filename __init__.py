@@ -3,6 +3,6 @@ from .calibration import Calibration
 from .cameracalibration import CameraCalibration
 from .projectorcalibration import ProjectorCalibration
 from .fullscreenshow import FullscreenShow
-from .streamercommandline import StreamerCommandLine
+from .streamer import Streamer
 
 from .exceptions import OpenFailedException
