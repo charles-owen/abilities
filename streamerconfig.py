@@ -8,6 +8,7 @@ class StreamerConfig:
     def __init__(self, docopt_args, config_file):
         self._camera = None         # Camera to use if camera option selected
         self._movie = None          # Movie to use if movie option selected
+        self._zoom =- 1.0           # Zoom factor to use
 
         self._config_file = config_file
         self._docopt_args = docopt_args
@@ -26,6 +27,10 @@ class StreamerConfig:
 
             if 'movie' in self._config:
                 self._movie = self._config['movie']
+
+            if 'zoom' in self._config:
+                self._zoom = float(self._config['zoom'])
+
         else:
             self._dir = os.getcwd()
             self._config = {}
@@ -61,3 +66,11 @@ class StreamerConfig:
     @property
     def config(self):
         return self._config
+
+    @property
+    def zoom(self):
+        return self._zoom
+
+    @zoom.setter
+    def zoom(self, value):
+        self._zoom = float(value)

@@ -19,6 +19,8 @@ class Streamer(ABC):
         else:
             self._config = StreamerConfig(docopt_args, None)
 
+        self._frame_number = 0
+
     def start(self):
         self.on_start()
 
@@ -40,6 +42,8 @@ class Streamer(ABC):
                 ret, frame = device.read()
                 if not ret:
                     break
+
+                self._frame_number += 1
 
                 self.on_frame(frame)
                 key = cv2.waitKey(1) & 0xff
@@ -73,3 +77,7 @@ class Streamer(ABC):
     @property
     def movie(self):
         return self._config.movie
+
+    @property
+    def frame_number(self):
+        return self._frame_number
