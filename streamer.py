@@ -26,6 +26,7 @@ class Streamer(ABC):
 
         device = None
         config = self._config
+        dir = config.dir
 
         if config.camera is not None:
             device = GeneralCamera(gain=0, frame_rate=30, camera=config.camera)
@@ -33,7 +34,7 @@ class Streamer(ABC):
                 raise OpenFailedException(f"Unable to open camera {config.camera}")
 
         elif config.movie is not None:
-            device = cv2.VideoCapture(config.movie)
+            device = cv2.VideoCapture(dir + config.movie)
             if not device.isOpened():
                 raise OpenFailedException(f"Unable to open movie {config.movie}")
 

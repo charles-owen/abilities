@@ -15,6 +15,9 @@ class StreamerConfig:
 
         if config_file is not None:
             self._dir = os.path.dirname(config_file)
+            if self._dir != '':
+                self._dir += '/'
+
             config = self.load_config(config_file)
 
             self._config = config
@@ -52,7 +55,10 @@ class StreamerConfig:
 
         if 'include' in config:
             dir = os.path.dirname(config_file)
-            config1 = self.load_config(dir + '/' + config['include'])
+            if dir != '':
+                dir += '/'
+
+            config1 = self.load_config(dir + config['include'])
             del config['include']
             config = StreamerConfig.merge_dicts_recursive(config, config1)
 
