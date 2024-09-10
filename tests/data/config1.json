@@ -1,0 +1,14 @@
+{
+  "camera-calibration": "trial1.yaml",
+  "movie": "trial1.mp4",
+  "zoom": 0.5,
+  "region": {
+      "y-range-fm-mm": -15,
+      "y-range-to-mm": 5,
+      "x-range-fm-mm": -30,
+      "x-range-to-mm": -7
+  },
+  "background": {
+      "sample": [120]
+  }
+}

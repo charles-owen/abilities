@@ -15,9 +15,7 @@ class StreamerConfig:
 
         if config_file is not None:
             self._dir = os.path.dirname(config_file)
-
-            with open(config_file, "r") as f:
-                config = json.load(f)
+            config = self.load_config(config_file)
 
             self._config = config
 
@@ -47,6 +45,29 @@ class StreamerConfig:
         # Default to camera 1 if none provided
         if self._camera is None and self._movie is None:
             self._camera = 1
+
+    def load_config(self, config_file):
+        with open(config_file, "r") as f:
+            config = json.load(f)
+
+        if 'include' in config:
+            dir = os.path.dirname(config_file)
+            config1 = self.load_config(dir + '/' + config['include'])
+            del config['include']
+            config = StreamerConfig.merge_dicts_recursive(config, config1)
+
+        return config
+
+    @staticmethod
+    def merge_dicts_recursive(dict1, dict2):
+
+        # Iterate through key-value pairs in dict2
+        for key, value in dict2.items():
+            if key in dict1 and isinstance(dict1[key], dict) and isinstance(value, dict):
+                StreamerConfig.merge_dicts_recursive(dict1[key], value)
+            else:
+                dict1[key] = value
+        return dict1
 
     @property
     def camera(self):

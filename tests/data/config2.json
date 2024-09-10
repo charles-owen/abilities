@@ -1,0 +1,11 @@
+{
+  "include": "config3.json",
+  "camera-calibration": "trial1.yaml",
+  "movie": "trial1.mp4",
+  "region": {
+      "a": 7
+  },
+  "background": {
+      "sample": [120]
+  }
+}

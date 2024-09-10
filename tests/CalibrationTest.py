@@ -18,7 +18,7 @@ class CalibrationTest(unittest.TestCase):
 
     def test_read(self):
         calibration = Calibration()
-        calibration.read(self._dir + "/calibration.yaml.dat")
+        calibration.read(self._dir + "/data/calibration.yaml.dat")
         # print(calibration.imsize)
         self.assertTrue(
             np.allclose(calibration.imsize, [1080, 1920]),
@@ -26,37 +26,37 @@ class CalibrationTest(unittest.TestCase):
 
     def test_project(self):
         calibration = Calibration()
-        calibration.read(self._dir + "/calibration.yaml.dat")
+        calibration.read(self._dir + "/data/calibration.yaml.dat")
 
         u, v = calibration.project(0.01890533, 0.12916625, 0.00284014)
         # print(f"{u}, {v}")
-        self.assertAlmostEquals(u, 385.8566745633289, 5)
-        self.assertAlmostEquals(v, 699.1137169777264, 5)
+        self.assertAlmostEqual(u, 385.8566745633289, 5)
+        self.assertAlmostEqual(v, 699.1137169777264, 5)
 
         u, v = calibration.project(-0.05214326, -0.03002264, -0.00936422)
         # print(f"{u}, {v}")
-        self.assertAlmostEquals(u, 122.20530471183292, 5)
-        self.assertAlmostEquals(v, 113.11239784085149, 5)
+        self.assertAlmostEqual(u, 122.20530471183292, 5)
+        self.assertAlmostEqual(v, 113.11239784085149, 5)
 
     def test_unproject(self):
         calibration = Calibration()
-        calibration.read(self._dir + "/calibration.yaml.dat")
+        calibration.read(self._dir + "/data/calibration.yaml.dat")
 
         o, d = calibration.unproject(385.8566745633289, 699.1137169777264)
         p = calibration.ray_intersect_xy(o, d, 0.00284014)
-        self.assertAlmostEquals(p[0][0], 0.01890533, 5)
-        self.assertAlmostEquals(p[1][0], 0.12916625, 5)
-        self.assertAlmostEquals(p[2][0], 0.00284014, 5)
+        self.assertAlmostEqual(p[0][0], 0.01890533, 5)
+        self.assertAlmostEqual(p[1][0], 0.12916625, 5)
+        self.assertAlmostEqual(p[2][0], 0.00284014, 5)
 
         o, d = calibration.unproject(122.20530471183292, 113.11239784085149)
         p = calibration.ray_intersect_xy(o, d, -0.00936422)
-        self.assertAlmostEquals(p[0][0], -0.05214326, 5)
-        self.assertAlmostEquals(p[1][0], -0.03002264, 5)
-        self.assertAlmostEquals(p[2][0], -0.00936422, 5)
+        self.assertAlmostEqual(p[0][0], -0.05214326, 5)
+        self.assertAlmostEqual(p[1][0], -0.03002264, 5)
+        self.assertAlmostEqual(p[2][0], -0.00936422, 5)
 
     def test_angle(self):
         calibration = Calibration()
-        calibration.read(self._dir + "/calibration-lab.yaml.dat")
+        calibration.read(self._dir + "/data/calibration-lab.yaml.dat")
 
         o1, d1 = calibration.unproject(0.0, 768.0/2)
         o2, d2 = calibration.unproject(1024.0, 768.0/2)
