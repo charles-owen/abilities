@@ -6,6 +6,12 @@ try:
 except ImportError:
     _has_pylon = False
 
+try:
+    from picamera2 import Picamera2
+    _has_picamera = True
+except ImportError:
+    _has_picamera = False
+
 class GeneralCamera:
     """
     Class for camera frame acquisition that will work for
@@ -62,6 +68,10 @@ class GeneralCamera:
         Open the camera for display
         :return: True if successful
         """
+
+        if _has_picamera:
+            # Using the raspberry pi camera
+            return self._open_picamera()
 
         if self._require_opencv:
             # We are explicitly requiring an OpenCV camera
@@ -162,6 +172,16 @@ class GeneralCamera:
 
         return True
 
+    def _open_picamera(self):
+        # Initialize Picamera2 and configure the camera
+        picam2 = Picamera2()
+        picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+        picam2.start()
+        self._picam2 = picam2
+        self._source = "picamera2"
+
+        return True
+
     def read(self):
         """
         Read a frame from the device. Frame is returned as an OpenCV frame
@@ -175,7 +195,10 @@ class GeneralCamera:
                 return True, image.GetArray()
             return False, None
         elif self._source == 'VideoCapture':
-            return self._device.read()
+            return True, self._device.read()
+        elif self._source == 'picamera2':
+            image = self._picam2.capture_array()
+            return True, image
         else:
             return False, None
 
@@ -211,4 +234,5 @@ class GeneralCamera:
             return self._device.ResultingFrameRate.Value
         else:
             return self._device.get(cv2.CAP_PROP_FPS)
+
 
