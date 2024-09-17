@@ -38,6 +38,32 @@ class CalibrationTest(unittest.TestCase):
         self.assertAlmostEqual(u, 122.20530471183292, 5)
         self.assertAlmostEqual(v, 113.11239784085149, 5)
 
+    def test_project2d(self):
+        calibration = Calibration()
+        calibration.read(self._dir + "/data/calibration2d.yaml.dat")
+
+        u, v = calibration.project2d(0.0, 0.0)
+        # print(f"{u}, {v}")
+        self.assertAlmostEqual(u, 1288.2850493736892, 5)
+        self.assertAlmostEqual(v, 345.4729947954919, 5)
+
+    def test_unproject2d(self):
+        calibration = Calibration()
+        calibration.read(self._dir + "/data/calibration2d.yaml.dat")
+
+        x, y = calibration.unproject2d(1288.2850493736892, 345.4729947954919)
+        # print(f"{x}, {y}")
+
+        self.assertAlmostEqual(x, 0, 5)
+        self.assertAlmostEqual(y, 0, 5)
+
+        for x0, x1 in [(112, 78), (-182.7, -53.1)]:
+            u, v = calibration.project2d(x0, x1)
+            x, y = calibration.unproject2d(u, v)
+
+            self.assertAlmostEqual(x, x0, 5)
+            self.assertAlmostEqual(y, x1, 5)
+
     def test_unproject(self):
         calibration = Calibration()
         calibration.read(self._dir + "/data/calibration.yaml.dat")
@@ -64,9 +90,9 @@ class CalibrationTest(unittest.TestCase):
         dot = d1[0][0] * d2[0][0] + d1[1][0] * d2[1][0] + d1[2][0] * d2[2][0];
         angle = math.degrees(math.acos(dot))
 
-        print(d1)
-        print(d2)
-        print(angle)
+        # print(d1)
+        # print(d2)
+        # print(angle)
 
         self.assertTrue(True)
 

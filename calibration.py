@@ -128,7 +128,8 @@ class Calibration:
 
     def project2d(self, x, y):
         """
-        Project a 3D world point to the 2D image space
+        Project a 2D world point to the 2D image space
+        Only works if the calibration matrix is a homography
         :param x: X in world coordinates
         :param y: Y in world coordinates
         :return: u, v in screen coordinates
@@ -139,6 +140,21 @@ class Calibration:
         v = p[1][0] / p[2][0]
 
         return u, v
+
+    def unproject2d(self, u, v):
+        """
+        Unproject an image pixels to a world x,y location
+        :param u: Pixel u
+        :param v: Pixel y
+        :return:
+        """
+        p = np.array([[u], [v], [1]])
+        mtx_inv = np.linalg.inv(self.mtx)
+        w = mtx_inv @ p
+        x = w[0][0] / w[2][0]
+        y = w[1][0] / w[2][0]
+
+        return x, y
 
     def unproject(self, u, v):
         """

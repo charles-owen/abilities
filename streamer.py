@@ -20,6 +20,8 @@ class Streamer(ABC):
             self._config = StreamerConfig(docopt_args, None)
 
         self._frame_number = 0
+        self._pause_key = None
+        self._running = False
 
     def start(self):
         self.on_start()
@@ -39,9 +41,12 @@ class Streamer(ABC):
                 raise OpenFailedException(f"Unable to open movie {config.movie}")
 
         if device is not None:
-            while True:
+            self._running = True
+
+            while self._running:
                 ret, frame = device.read()
                 if not ret:
+                    self._running = False
                     break
 
                 self._frame_number += 1
@@ -50,7 +55,17 @@ class Streamer(ABC):
                 key = cv2.waitKey(1) & 0xff
                 if not self.on_key(key, frame):
                     if key == ord('q') or key == 27:
-                        break
+                        self._running = False
+
+                    elif key == self._pause_key:
+                        while self._running:
+                            key = cv2.waitKey(0) & 0xff
+                            if not self.on_key(key, frame):
+                                if key == ord('q') or key == 27:
+                                    self._running = False
+
+                                elif key == self._pause_key:
+                                    break
 
         self.on_stop()
 
@@ -82,3 +97,11 @@ class Streamer(ABC):
     @property
     def frame_number(self):
         return self._frame_number
+
+    @property
+    def pause_key(self):
+        return self._pause_key
+
+    @pause_key.setter
+    def pause_key(self, key):
+        self._pause_key = ord(key)
