@@ -8,14 +8,14 @@ class StreamerConfig:
     def __init__(self, docopt_args, config_file):
         self._camera = None         # Camera to use if camera option selected
         self._movie = None          # Movie to use if movie option selected
-        self._zoom =- 1.0           # Zoom factor to use
+        self._zoom = 1.0           # Zoom factor to use
 
         self._config_file = config_file
         self._docopt_args = docopt_args
 
         if config_file is not None:
             self._dir = os.path.dirname(config_file)
-            if self._dir != '':
+            if self._dir != '' and not self._dir.endswith("/"):
                 self._dir += '/'
 
             config = self.load_config(config_file)
@@ -85,10 +85,7 @@ class StreamerConfig:
 
     @property
     def dir(self):
-        if self._dir == '':
-            return ''
-        else:
-            return self._dir + '/'
+        return self._dir
 
     @property
     def config(self):
