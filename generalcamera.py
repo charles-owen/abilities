@@ -195,7 +195,8 @@ class GeneralCamera:
                 return True, image.GetArray()
             return False, None
         elif self._source == 'VideoCapture':
-            return True, self._device.read()
+            # The read function already returns a tuple
+            return self._device.read()
         elif self._source == 'picamera2':
             image = self._picam2.capture_array()
             return True, image
