@@ -1,7 +1,7 @@
 import screeninfo
 import numpy as np
 import cv2
-
+import platform
 
 class FullscreenShow:
     """
@@ -18,12 +18,12 @@ class FullscreenShow:
 
     def open(self):
         # get the size of the screen
-        monitors = screeninfo.get_monitors()
+        monitors = FullscreenShow.get_monitors()
         if self._screen < 1 or self._screen > len(monitors):
             print(f'Fullscreen: screen {self._screen} is not available')
             return
 
-        screen = screeninfo.get_monitors()[self._screen - 1]
+        screen = monitors[self._screen - 1]
         print(monitors)
         print(screen)
         width, height = screen.width, screen.height
@@ -47,6 +47,19 @@ class FullscreenShow:
         if self._is_open:
             image = np.ones((self._height, self._width), dtype=np.float32)
             self.imshow(image)
+
+    @staticmethod
+    def get_monitors():
+        """
+        Get monitors from the OS
+        Wrapper for screeninfo.get_monitors that works for different platforms
+        :return: Array of monitors
+        """
+        p = platform.system()
+        if p == 'Darwin':
+            return screeninfo.get_monitors(screeninfo.Enumerator.OSX)
+        else:
+            return screeninfo.get_monitors()
 
     @property
     def width(self):
