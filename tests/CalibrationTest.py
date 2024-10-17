@@ -2,7 +2,7 @@ import sys
 import os
 
 # Add the parent directory of the current script to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir)))
 
 import unittest
 from abilities import Calibration
