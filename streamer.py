@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 import cv2
 
-from .generalcamera import GeneralCamera
-from .exceptions import OpenFailedException
-from .streamerconfig import StreamerConfig
+from generalcamera import GeneralCamera
+from exceptions import OpenFailedException
+from streamerconfig import StreamerConfig
 
 class Streamer(ABC):
     """

@@ -1,6 +1,6 @@
-from .calibration import Calibration
-from .fullscreenshow import FullscreenShow
-from .generalcamera import GeneralCamera
+from calibration import Calibration
+from fullscreenshow import FullscreenShow
+from generalcamera import GeneralCamera
 import numpy as np
 import cv2
 import yaml
